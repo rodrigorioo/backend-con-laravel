@@ -14,99 +14,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 // HOME
-Route::get('/', function () {
-
-    $categorias = [
-        "Fideos" => [
-            'Moñitos',
-            'Fideos largos',
-            'Cabello de angel',
-        ],
-        "Verduras" => [
-            'Tomates',
-            'Lechuga',
-            'Cebolla',
-        ],
-    ];
-
-    $productos = [];
-    $nombreCategorias = [];
-    foreach($categorias as $nombreCategoria => $categoriaArray) {
-
-        $nombreCategorias[] = $nombreCategoria;
-
-        foreach($categoriaArray as $producto) {
-            $productos[] = $producto;
-        }
-    }
-
-    return view('home', [
-        'productos' => $productos,
-        'categorias' => $nombreCategorias,
-    ]);
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 
 // CATEGORIAS
 Route::prefix('categorias')->group(function() {
 
-    Route::get('/', function(\Illuminate\Http\Request $request) {
+    Route::get('/', [\App\Http\Controllers\CategoriaController::class, 'index']);
 
-        $categorias = [
-            "Fideos" => [
-                'Moñitos',
-                'Fideos largos',
-                'Cabello de angel',
-            ],
-            "Verduras" => [
-                'Tomates',
-                'Lechuga',
-                'Cebolla',
-            ],
-        ];
-
-        // Chequear si existe el parámetro de query "nombre"
-        if(!is_null($request->input('nombre'))) {
-
-            if(array_key_exists($request->input('nombre'), $categorias)) {
-                echo 'Existe categoría';
-            }
-
-        } else {
-            foreach($categorias as $nombreCategoria => $categoria) {
-                echo $nombreCategoria.'<br>';
-            }
-        }
-    });
-
-    Route::get('{nombreCategoria}', function(string $nombreCategoria) {
-        echo "productos de ".$nombreCategoria;
-    });
+    Route::get('crear-categoria', [\App\Http\Controllers\CategoriaController::class, 'crearCategoria']);
+    Route::get('{nombreCategoria}', [\App\Http\Controllers\CategoriaController::class, 'categoria']);
 });
 
-Route::get('productos/{categoria?}', function(?string $categoria = null) {
-
-    $categorias = [
-        "Fideos" => [
-            'Moñitos',
-            'Fideos largos',
-            'Cabello de angel',
-        ],
-        "Verduras" => [
-            'Tomates',
-            'Lechuga',
-            'Cebolla',
-        ],
-    ];
-
-    $productos = [];
-    foreach($categorias as $categoriaArray) {
-        foreach($categoriaArray as $producto) {
-            $productos[] = $producto;
-        }
-    }
-
-    return view('productos', [
-        'productos' => $productos,
-    ]);
-});
+// PRODUCTOS
+Route::get('productos/crear-producto', [\App\Http\Controllers\ProductoController::class, 'crearProducto']);
+Route::get('productos/ver-producto/{producto}', [\App\Http\Controllers\ProductoController::class, 'verProducto']);
+Route::get('productos/{categoria?}', [\App\Http\Controllers\ProductoController::class, 'index']);
 
