@@ -30,3 +30,33 @@ Route::get('productos/crear-producto', [\App\Http\Controllers\ProductoController
 Route::get('productos/ver-producto/{producto}', [\App\Http\Controllers\ProductoController::class, 'verProducto']);
 Route::get('productos/{categoria?}', [\App\Http\Controllers\ProductoController::class, 'index']);
 
+/**
+ * ADMIN
+ */
+
+Route::prefix('admin')->group(function() {
+
+    Route::middleware('admin-logueado:0')->group(function() {
+        Route::get('login', [\App\Http\Controllers\Backend\AdminController::class, 'login']);
+        Route::post('login', [\App\Http\Controllers\Backend\AdminController::class, 'loguear']);
+    });
+
+    Route::middleware('admin-logueado:1')->group(function() {
+
+        Route::get('/', [\App\Http\Controllers\Backend\AdminController::class, 'home']);
+        Route::get('logout', [\App\Http\Controllers\Backend\AdminController::class, 'logout']);
+
+        // Categorías
+        Route::resource('categorias', \App\Http\Controllers\Backend\CategoriaController::class);
+    });
+});
+
+Route::get('crear-usuario', function() {
+
+    $user = new \App\Models\User();
+    $user->name = "Rodrigo";
+    $user->email = "rodrigo@mail.com";
+    $user->password = \Illuminate\Support\Facades\Hash::make('123');
+    $user->save();
+
+});
