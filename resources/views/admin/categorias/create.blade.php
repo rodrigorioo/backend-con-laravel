@@ -10,17 +10,15 @@
 
             @include('_includes.admin._modules.errores')
 
-            <form method="post" action="{{ action([\App\Http\Controllers\Backend\CategoriaController::class, 'update'], $categoria) }}">
+            <form method="post" action="{{ action([\App\Http\Controllers\Backend\CategoriaController::class, 'store']) }}">
 
                 @csrf
-
-                <input type="hidden" name="_method" value="patch" />
 
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input class="form-control" name="nombre" id="nombre" type="text" placeholder="Ingrese un nombre" autocomplete="off" value="{{ $categoria->nombre }}">
+                            <input class="form-control" name="nombre" id="nombre" type="text" placeholder="Ingrese un nombre" autocomplete="off">
                         </div>
                     </div>
 

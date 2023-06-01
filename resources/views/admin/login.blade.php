@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="description" content="Backstrap - Open Source Bootstrap 4 Admin Template on top of CoreUI">
+    <meta name="description"☻ content="Backstrap - Open Source Bootstrap 4 Admin Template on top of CoreUI">
     <meta name="author" content="Cristian Tabacitu">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard,CoreUI">
     <title>BackStrap - Free Bootstrap 4 Admin Template</title>
@@ -37,13 +37,15 @@
                         <h1>Login</h1>
                         <p class="text-muted">Sign In to your account</p>
 
+                        @include('_includes.admin._modules.errores')
+
                         <form method="post" action="{{ action([\App\Http\Controllers\Backend\AdminController::class, 'loguear']) }}" autocomplete="off">
 
                             @csrf
 
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend"><span class="input-group-text"><i class="icon-user"></i></span></div>
-                                <input class="form-control" name="email" type="email" placeholder="Email" autocomplete="off">
+                                <input class="form-control" name="email" type="text" placeholder="Email" autocomplete="off">
                             </div>
                             <div class="input-group mb-4">
                                 <div class="input-group-prepend"><span class="input-group-text"><i class="icon-lock"></i></span></div>

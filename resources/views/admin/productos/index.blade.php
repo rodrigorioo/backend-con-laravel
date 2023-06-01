@@ -8,23 +8,25 @@
         <thead>
         <tr>
             <th>ID</th>
+            <th>Categoría</th>
             <th>Nombre</th>
             <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
-        @foreach($categorias as $categoria)
+        @foreach($productos as $producto)
             <tr>
-                <td>{{ $categoria->id }}</td>
-                <td>{{ $categoria->nombre }}</td>
+                <td>{{ $producto->id }}</td>
+                <td>{{ $producto->categoria->nombre }}</td>
+                <td>{{ $producto->nombre }}</td>
                 <td>
 
                     <div class="d-flex align-items-center">
-                        <a href="{{ action([\App\Http\Controllers\Backend\CategoriaController::class, 'edit'], $categoria->id) }}" class="mr-3">
+                        <a href="{{ action([\App\Http\Controllers\Backend\ProductoController::class, 'edit'], $producto->id) }}" class="mr-3">
                             <button class="btn btn-info" type="button">Editar</button>
                         </a>
 
-                        <form method="post" action="{{ action([\App\Http\Controllers\Backend\CategoriaController::class, 'destroy'], $categoria) }}" onclick="return confirm('Está seguro que desea eliminar este elemento?')">
+                        <form method="post" action="{{ action([\App\Http\Controllers\Backend\ProductoController::class, 'destroy'], $producto) }}" onclick="return confirm('Está seguro que desea eliminar este elemento?')">
 
                             @csrf
 

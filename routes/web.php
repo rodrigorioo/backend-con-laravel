@@ -20,13 +20,10 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 Route::prefix('categorias')->group(function() {
 
     Route::get('/', [\App\Http\Controllers\CategoriaController::class, 'index']);
-
-    Route::get('crear-categoria', [\App\Http\Controllers\CategoriaController::class, 'crearCategoria']);
     Route::get('{nombreCategoria}', [\App\Http\Controllers\CategoriaController::class, 'categoria']);
 });
 
 // PRODUCTOS
-Route::get('productos/crear-producto', [\App\Http\Controllers\ProductoController::class, 'crearProducto']);
 Route::get('productos/ver-producto/{producto}', [\App\Http\Controllers\ProductoController::class, 'verProducto']);
 Route::get('productos/{categoria?}', [\App\Http\Controllers\ProductoController::class, 'index']);
 
@@ -48,6 +45,9 @@ Route::prefix('admin')->group(function() {
 
         // Categorías
         Route::resource('categorias', \App\Http\Controllers\Backend\CategoriaController::class);
+
+        // Productos
+        Route::resource('productos', \App\Http\Controllers\Backend\ProductoController::class);
     });
 });
 
@@ -56,7 +56,7 @@ Route::get('crear-usuario', function() {
     $user = new \App\Models\User();
     $user->name = "Rodrigo";
     $user->email = "rodrigo@mail.com";
-    $user->password = \Illuminate\Support\Facades\Hash::make('123');
+    $user->password = \Illuminate\Support\Facades\Hash::make('123456');
     $user->save();
 
 });
