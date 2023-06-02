@@ -18,32 +18,6 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-// Nos devuelve todos los productos en formato JSON
-Route::get('productos', function() {
-    $categorias = [
-        "Fideos" => [
-            'Moñitos',
-            'Fideos largos',
-            'Cabello de angel',
-        ],
-        "Verduras" => [
-            'Tomates',
-            'Lechuga',
-            'Cebolla',
-        ],
-    ];
+// Productos
+Route::get('productos/{producto}', [\App\Http\Controllers\API\ProductoController::class, 'show']);
 
-    $productos = [];
-
-    foreach($categorias as $categoriaArray) {
-        foreach($categoriaArray as $producto) {
-            $productos[] = $producto;
-        }
-    }
-
-    return new \Illuminate\Http\JsonResponse($productos);
-});
-
-Route::get('categorias', function() {
-    echo 'api de categorias';
-});

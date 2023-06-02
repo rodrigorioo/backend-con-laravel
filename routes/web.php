@@ -16,16 +16,15 @@ use Illuminate\Support\Facades\Route;
 // HOME
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 
-// CATEGORIAS
-Route::prefix('categorias')->group(function() {
-
-    Route::get('/', [\App\Http\Controllers\CategoriaController::class, 'index']);
-    Route::get('{nombreCategoria}', [\App\Http\Controllers\CategoriaController::class, 'categoria']);
-});
-
 // PRODUCTOS
-Route::get('productos/ver-producto/{producto}', [\App\Http\Controllers\ProductoController::class, 'verProducto']);
-Route::get('productos/{categoria?}', [\App\Http\Controllers\ProductoController::class, 'index']);
+Route::prefix('productos')->group(function() {
+
+    Route::prefix('{categoria}')->group(function() {
+
+        Route::get('/', [\App\Http\Controllers\ProductoController::class, 'categoria']);
+        Route::get('{producto}', [\App\Http\Controllers\ProductoController::class, 'verProducto']);
+    });
+});
 
 /**
  * ADMIN
