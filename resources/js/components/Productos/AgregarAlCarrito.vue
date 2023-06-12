@@ -3,7 +3,7 @@
 
 		<div class="col-12 col-sm-6">
 			<input type="number" class="form-control" placeholder="Ingrese cantidad"
-				   :max="stock"
+				   :max="props.producto.stock"
 				   v-model="cantidad" />
 		</div>
 
@@ -16,18 +16,18 @@
 
 <script setup>
 import {ref} from "vue";
+import {useCarritoStore} from "@/stores/carrito";
 
 // Props
 const props = defineProps({
-	id: {
-		type: Number,
-		default: 0,
+	producto: {
+		type: Object,
+		default: () => ({}),
 	},
-	stock: {
-		type: Number,
-		default: 0,
-	}
 });
+
+// Store
+const store = useCarritoStore();
 
 // Data
 const cantidad = ref(0);
@@ -37,27 +37,12 @@ const agregarAlCarrito = () => {
 
 
 	// Validamos stock
-	if(props.stock < cantidad.value) {
+	if(props.producto.stock < cantidad.value) {
 		return;
 	}
 
-	const productos = JSON.parse(localStorage.getItem("productos")) || [];
-
-	const indexExisteProducto = productos.findIndex( (el) => parseInt(el.id) === parseInt(props.id));
-
-	// Si no existe el producto
-	if(indexExisteProducto === -1) {
-		productos.push({
-			id: props.id,
-			cantidad: cantidad.value,
-		});
-	} else { // Si existe el producto
-
-		// Agregarle la cantidad
-		productos[indexExisteProducto].cantidad += cantidad.value;
-	}
-
-	localStorage.setItem("productos", JSON.stringify(productos));
+	// Agregar producto al carrito
+	store.agregarProducto(props.producto, cantidad.value);
 };
 
 </script>

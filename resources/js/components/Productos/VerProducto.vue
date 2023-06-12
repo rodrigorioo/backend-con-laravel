@@ -10,7 +10,7 @@
 
 				<div class="row">
 					<div class="col-12">
-						<h1>{{ nombre }}</h1>
+						<h1>{{ producto.nombre }}</h1>
 					</div>
 
 					<div class="col-12">
@@ -18,17 +18,16 @@
 					</div>
 
 					<div class="col-12">
-						<h6><strong>PRECIO:</strong> ${{ precio }}</h6>
+						<h6><strong>PRECIO:</strong> ${{ producto.precio }}</h6>
 					</div>
 
 					<div class="col-12">
-						<h6><strong>STOCK:</strong> {{ stock }}</h6>
+						<h6><strong>STOCK:</strong> {{ producto.stock }}</h6>
 					</div>
 
 					<div class="col-12 mt-3">
 						<AgregarAlCarrito
-							:id="props.id"
-							:stock="stock" />
+							:producto="producto" />
 					</div>
 				</div>
 
@@ -41,6 +40,7 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import AgregarAlCarrito from "@/components/Productos/AgregarAlCarrito.vue";
+import {useCarritoStore} from "@/stores/carrito";
 
 // Props
 const props = defineProps({
@@ -50,10 +50,11 @@ const props = defineProps({
 	},
 });
 
+// Store
+const store = useCarritoStore();
+
 // Data
-const nombre = ref("");
-const precio = ref(0);
-const stock = ref(0);
+const producto = ref({});
 
 // Eventos
 onMounted( () => {
@@ -62,14 +63,11 @@ onMounted( () => {
 	axios
 		.get('/api/productos/'+props.id)
 		.then( (responseProducto) => {
-
-			const producto = responseProducto.data;
-
-			// Setiamos variables del componente
-			nombre.value = producto.nombre;
-			precio.value = producto.precio;
-			stock.value = producto.stock;
+			producto.value = responseProducto.data;
 		});
+
+	// Traer productos del local storage
+	store.obtenerProductos();
 
 });
 
