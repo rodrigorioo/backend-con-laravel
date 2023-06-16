@@ -26,6 +26,8 @@ Route::prefix('productos')->group(function() {
     });
 });
 
+Route::get('carrito', [\App\Http\Controllers\CarritoController::class, 'carrito']);
+
 /**
  * ADMIN
  */
