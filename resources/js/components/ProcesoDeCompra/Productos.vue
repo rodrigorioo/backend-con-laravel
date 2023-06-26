@@ -28,12 +28,7 @@
 		</div>
 
 		<div class="col-12 col-sm-3">
-			<div class="card">
-				<h5 class="card-header">TOTAL</h5>
-				<div class="card-body">
-					<h6>$TOTAL DE LA COMPRA</h6>
-				</div>
-			</div>
+			<Total />
 		</div>
 	</div>
 
@@ -42,6 +37,7 @@
 <script setup>
 // Imports
 import {useCarritoStore} from "@/stores/carrito";
+import Total from "@/components/ProcesoDeCompra/Total.vue";
 
 // Store
 const store = useCarritoStore();

@@ -45,9 +45,11 @@ import Productos from "@/components/ProcesoDeCompra/Productos.vue";
 import DatosDelComprador from "@/components/ProcesoDeCompra/DatosDelComprador.vue";
 import MetodoDeEntrega from "@/components/ProcesoDeCompra/MetodoDeEntrega.vue";
 import ResumenDeCompra from "@/components/ProcesoDeCompra/ResumenDeCompra.vue";
+import {useProcesoDeCompraStore} from "@/stores/proceso_de_compra/index.js";
 
 // Store
-const store = useCarritoStore();
+const storeCarrito = useCarritoStore();
+const storeProcesoDeCompra = useProcesoDeCompraStore();
 
 // Data
 const paso = ref(1);
@@ -63,13 +65,47 @@ const pasoSiguiente = () => {
 
 const finalizarCompra = () => {
 
-	console.log("Finaliza la compra");
+	/*
+	'nombre' => 'required|string',
+            'apellido' => 'required|string',
+            'email' => 'required|email',
+            'telefono' => 'required|string',
+
+            'metodo_de_envio' => ['required', Rule::in(['Envío a domicilio', 'Retiro en sucursal'])],
+            'direccion' => 'required_if:metodo_de_envio,Envío a domicilio|nullable|string',
+            'codigo_postal' => 'required_if:metodo_de_envio,Envío a domicilio|nullable|string',
+            'localidad' => 'required_if:metodo_de_envio,Envío a domicilio|nullable|string',
+            'provincia' => 'required_if:metodo_de_envio,Envío a domicilio|nullable|string',
+            'pais' => 'required_if:metodo_de_envio,Envío a domicilio|nullable|string',
+	 */
+
+	axios
+		.post('/api/carrito/finalizar-compra', {
+			productos: storeCarrito.productos,
+
+			nombre: storeProcesoDeCompra.nombre,
+			apellido: storeProcesoDeCompra.apellido,
+			email: storeProcesoDeCompra.email,
+			telefono: storeProcesoDeCompra.telefono,
+
+			metodo_de_envio: storeProcesoDeCompra.metodo_de_envio,
+			direccion: storeProcesoDeCompra.direccion,
+			codigo_postal: storeProcesoDeCompra.codigo_postal,
+			localidad: storeProcesoDeCompra.localidad,
+			provincia: storeProcesoDeCompra.provincia,
+			pais: storeProcesoDeCompra.pais,
+		})
+		.then( (responseFinalizarCompra) => {
+			console.log("se finalizó la compra");
+		}).catch( (err) => {
+			console.error(err);
+		});
 };
 
 // Eventos
 onMounted( () => {
 
-	store.obtenerProductos();
+	storeCarrito.obtenerProductos();
 
 });
 
