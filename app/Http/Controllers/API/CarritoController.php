@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Data\ProductoCarritoData;
+use App\Enums\MetodoDeEnvio;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CalcularTotalCarritoAPIRequest;
 use App\Http\Requests\FinalizarCompraAPIRequest;
@@ -11,6 +12,7 @@ use App\Models\CompraProducto;
 use App\Models\Producto;
 use App\Services\CarritoService;
 use App\Services\CompraService;
+use App\Services\MercadoPagoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,8 @@ class CarritoController extends Controller
 {
     public function __construct(
         private CompraService $compraService,
-        private CarritoService $carritoService
+        private CarritoService $carritoService,
+        private MercadoPagoService $mercadoPagoService
     ) {}
 
     public function calcularTotal(CalcularTotalCarritoAPIRequest $request) {
@@ -33,13 +36,14 @@ class CarritoController extends Controller
         $compra = $this->compraService->crearCompra($request);
 
         // Integrar mercadopago
-
+        $preferencia = $this->mercadoPagoService->crearPreferencia($compra);
 
         // Enviar los mails
-
+        // TODO:
 
         return new JsonResponse([
-            'mensaje' => 'Compra finalizada'
+            'mensaje' => 'Compra finalizada',
+            'init_point' => $preferencia->init_point,
         ]);
     }
 }

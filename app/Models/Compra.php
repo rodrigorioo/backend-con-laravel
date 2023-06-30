@@ -21,4 +21,12 @@ class Compra extends Model
         'provincia',
         'pais',
     ];
+
+    public function productos() {
+        return $this->belongsToMany(Producto::class, 'compra_productos', 'compra_id', 'producto_id')
+                ->withPivot([
+                    'cantidad',
+                    'precio',
+                ]);
+    }
 }
