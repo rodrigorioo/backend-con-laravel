@@ -52,6 +52,9 @@ Route::prefix('admin')->group(function() {
 
         // Productos
         Route::resource('productos', \App\Http\Controllers\Backend\ProductoController::class);
+
+        // Compras
+        Route::resource('compras', \App\Http\Controllers\Backend\CompraController::class);
     });
 });
 

@@ -25,7 +25,7 @@
                                 <option value="0" @if(!$compra->pagado) selected @endif>
                                     No
                                 </option>
-                                <option value="1" @if($producto->pagado) selected @endif>
+                                <option value="1" @if($compra->pagado) selected @endif>
                                     Si
                                 </option>
                             </select>

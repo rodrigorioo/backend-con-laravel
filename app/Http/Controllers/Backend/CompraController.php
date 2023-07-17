@@ -65,7 +65,7 @@ class CompraController extends Controller
         $compra->save();
 
         return Redirect::action([CompraController::class, 'index'])->with([
-            'succcess' => 'La compra fue modificada con éxito',
+            'success' => 'La compra fue modificada con éxito',
         ]);
     }
 
@@ -77,7 +77,7 @@ class CompraController extends Controller
         $compra->delete();
 
         return Redirect::action([CompraController::class, 'index'])->with([
-            'succcess' => 'La compra fue eliminada con éxito',
+            'success' => 'La compra fue eliminada con éxito',
         ]);
     }
 }
