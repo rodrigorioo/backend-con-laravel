@@ -60,16 +60,6 @@ Route::prefix('admin')->group(function() {
     });
 });
 
-Route::get('crear-usuario', function() {
-
-    $user = new \App\Models\User();
-    $user->name = "Rodrigo";
-    $user->email = "rodrigo@mail.com";
-    $user->password = \Illuminate\Support\Facades\Hash::make('123456');
-    $user->save();
-
-});
-
 Route::get('signature', function() {
 
     $url = \Illuminate\Support\Facades\URL::signedRoute('cancelar-compra', ['compra' => 34]);
