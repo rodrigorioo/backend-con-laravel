@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Data\ProductoCarritoData;
 use App\Enums\MetodoDeEnvio;
+use App\Events\CompraFinalizada;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CalcularTotalCarritoAPIRequest;
 use App\Http\Requests\FinalizarCompraAPIRequest;
@@ -38,8 +39,11 @@ class CarritoController extends Controller
         // Integrar mercadopago
         $preferencia = $this->mercadoPagoService->crearPreferencia($compra);
 
+        // Ejecutar evento de compra finalizada
+        CompraFinalizada::dispatch($compra);
+
         // Enviar los mails
-        // TODO:
+        $this->compraService->enviarMail($compra, $preferencia->init_point);
 
         return new JsonResponse([
             'mensaje' => 'Compra finalizada',

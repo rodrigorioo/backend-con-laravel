@@ -28,6 +28,9 @@ Route::prefix('productos')->group(function() {
 
 Route::get('carrito', [\App\Http\Controllers\CarritoController::class, 'carrito']);
 
+Route::get('cancelar-compra/{compra}', [\App\Http\Controllers\CompraController::class, 'cancelarCompra'])
+    ->name('cancelar-compra');
+
 /**
  * ADMIN
  */
@@ -60,4 +63,11 @@ Route::get('crear-usuario', function() {
     $user->password = \Illuminate\Support\Facades\Hash::make('123456');
     $user->save();
 
+});
+
+Route::get('signature', function() {
+
+    $url = \Illuminate\Support\Facades\URL::signedRoute('cancelar-compra', ['compra' => 34]);
+
+    dd($url);
 });

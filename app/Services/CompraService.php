@@ -4,9 +4,12 @@ namespace App\Services;
 
 use App\Data\ProductoCarritoData;
 use App\Http\Requests\FinalizarCompraAPIRequest;
+use App\Mail\CompraRealizada;
 use App\Models\Compra;
 use App\Models\CompraProducto;
+use App\Models\Producto;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 
 class CompraService {
 
@@ -35,10 +38,6 @@ class CompraService {
             );
         }
 
-        // Calcular total
-        $compra->total = $this->calcularTotal($productosCompra);
-        $compra->save();
-
         return $compra;
     }
 
@@ -48,9 +47,14 @@ class CompraService {
      * @return float
      */
     public function calcularTotal(Collection $compraProductos): float {
-        return $compraProductos->reduce(function (float $acc, CompraProducto $compraProducto) {
-            return $acc + ($compraProducto->precio * $compraProducto->cantidad);
+        return $compraProductos->reduce(function (float $acc, Producto $producto) {
+            return $acc + ($producto->pivot->precio * $producto->pivot->cantidad);
         }, 0);
     }
 
+    public function enviarMail(Compra $compra, string $linkDeMercadoPago) {
+
+        Mail::to($compra->email)->send(new CompraRealizada($compra, $linkDeMercadoPago));
+
+    }
 }
