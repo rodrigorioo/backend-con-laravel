@@ -16,6 +16,7 @@ use App\Services\CompraService;
 use App\Services\MercadoPagoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CarritoController extends Controller
 {
@@ -33,17 +34,53 @@ class CarritoController extends Controller
 
     public function finalizarCompra(FinalizarCompraAPIRequest $request) {
 
-        // Crear la compra
-        $compra = $this->compraService->crearCompra($request);
+        // Forma 1
+        $preferencia = DB::transaction(function() use($request) {
 
-        // Integrar mercadopago
-        $preferencia = $this->mercadoPagoService->crearPreferencia($compra);
+            // Crear la compra
+            $compra = $this->compraService->crearCompra($request);
 
-        // Ejecutar evento de compra finalizada
-        CompraFinalizada::dispatch($compra);
+            // Integrar mercadopago
+            $preferencia = $this->mercadoPagoService->crearPreferencia($compra);
+
+            // Ejecutar evento de compra finalizada
+            CompraFinalizada::dispatch($compra);
+
+            return $preferencia;
+        });
+
+        // Forma 2
+//        DB::beginTransaction();
+//
+//        // Crear la compra
+//        try {
+//            $compra = $this->compraService->crearCompra($request);
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//
+//            return new JsonResponse([
+//                'mensaje' => $e->getMessage(),
+//            ], 500);
+//        }
+//
+//        // Integrar mercadopago
+//        try {
+//            $preferencia = $this->mercadoPagoService->crearPreferencia($compra);
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//
+//            return new JsonResponse([
+//                'mensaje' => $e->getMessage(),
+//            ], 500);
+//        }
+//
+//        // Ejecutar evento de compra finalizada
+//        CompraFinalizada::dispatch($compra);
+//
+//        DB::commit();
 
         // Enviar los mails
-        $this->compraService->enviarMail($compra, $preferencia->init_point);
+        // $this->compraService->enviarMail($compra, $preferencia->init_point);
 
         return new JsonResponse([
             'mensaje' => 'Compra finalizada',

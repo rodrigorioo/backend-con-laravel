@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\CompraPagada;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
