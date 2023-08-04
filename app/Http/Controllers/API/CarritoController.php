@@ -57,7 +57,7 @@ class CarritoController extends Controller
         });
 
         // Enviar los mails
-        // $this->compraService->enviarMail($compra, $preferencia->init_point);
+        $this->compraService->enviarMail($compra, $preferencia->init_point);
 
         return new JsonResponse([
             'mensaje' => 'Compra finalizada',
