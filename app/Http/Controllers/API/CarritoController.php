@@ -16,6 +16,7 @@ use App\Services\CompraService;
 use App\Services\MercadoPagoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class CarritoController extends Controller
@@ -32,24 +33,31 @@ class CarritoController extends Controller
         ]);
     }
 
-    public function finalizarCompra(FinalizarCompraAPIRequest $request) {
+    public function finalizarCompra(Request $request) {
 
-        [$compra, $preferencia] = DB::transaction(function() use($request) {
+        [$compra, $preferencia] = Cache::lock('finalizar_compra')->block(10, function () {
 
-            // Crear la compra
-            $compra = $this->compraService->crearCompra($request);
+            $request = app(FinalizarCompraAPIRequest::class);
 
-            // Integrar mercadopago
-            $preferencia = $this->mercadoPagoService->crearPreferencia($compra);
+            return DB::transaction(function() use($request) {
 
-            // Ejecutar evento de compra finalizada
-            CompraFinalizada::dispatch($compra);
+                sleep(5);
 
-            return [$compra, $preferencia];
+                // Crear la compra
+                $compra = $this->compraService->crearCompra($request);
+
+                // Integrar mercadopago
+                $preferencia = $this->mercadoPagoService->crearPreferencia($compra);
+
+                // Ejecutar evento de compra finalizada
+                CompraFinalizada::dispatch($compra);
+
+                return [$compra, $preferencia];
+            });
         });
 
         // Enviar los mails
-        $this->compraService->enviarMail($compra, $preferencia->init_point);
+        // $this->compraService->enviarMail($compra, $preferencia->init_point);
 
         return new JsonResponse([
             'mensaje' => 'Compra finalizada',

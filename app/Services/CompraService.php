@@ -36,6 +36,11 @@ class CompraService {
                     'precio' => $productoCarrito->producto->precio,
                 ])
             );
+
+            // Descontar stock del producto
+            $producto = $productoCarrito->producto;
+            $producto->stock -= $productoCarrito->cantidad;
+            $producto->save();
         }
 
         return $compra;
