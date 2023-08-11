@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductoCollection;
+use App\Http\Resources\ProductoResource;
 use App\Models\Producto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ class ProductoController extends Controller
         $productos = Producto::orderBy('precio', 'asc')
             ->paginate(10);
 
-        return new JsonResponse($productos);
+        return ProductoResource::collection($productos);
     }
 
     /**
@@ -41,7 +43,7 @@ class ProductoController extends Controller
      */
     public function show(Producto $producto)
     {
-        return new JsonResponse($producto);
+        return new ProductoResource($producto);
     }
 
     /**
