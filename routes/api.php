@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 // Productos
-Route::get('productos/{producto}', [\App\Http\Controllers\API\ProductoController::class, 'show']);
+Route::apiResource('productos', \App\Http\Controllers\API\ProductoController::class);
 
 Route::prefix('carrito')->group(function() {
     Route::post('calcular-total', [\App\Http\Controllers\API\CarritoController::class, 'calcularTotal']);

@@ -14,7 +14,10 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
+        $productos = Producto::orderBy('precio', 'asc')
+            ->paginate(10);
+
+        return new JsonResponse($productos);
     }
 
     /**
