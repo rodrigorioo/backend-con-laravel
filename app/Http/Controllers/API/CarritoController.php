@@ -8,6 +8,7 @@ use App\Events\CompraFinalizada;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CalcularTotalCarritoAPIRequest;
 use App\Http\Requests\FinalizarCompraAPIRequest;
+use App\Jobs\EnviarMailDeCompra;
 use App\Models\Compra;
 use App\Models\CompraProducto;
 use App\Models\Producto;
@@ -41,8 +42,6 @@ class CarritoController extends Controller
 
             return DB::transaction(function() use($request) {
 
-                sleep(5);
-
                 // Crear la compra
                 $compra = $this->compraService->crearCompra($request);
 
@@ -56,8 +55,8 @@ class CarritoController extends Controller
             });
         });
 
-        // Enviar los mails
-        $this->compraService->enviarMail($compra, $preferencia->init_point);
+        // Job para enviar el mail
+        EnviarMailDeCompra::dispatch($compra, $preferencia->init_point);
 
         return new JsonResponse([
             'mensaje' => 'Compra finalizada',
