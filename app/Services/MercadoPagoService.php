@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\MercadoPagoException;
 use App\Models\Compra;
 use MercadoPago\Item;
 use MercadoPago\Preference;
@@ -10,7 +11,12 @@ use MercadoPago\SDK;
 class MercadoPagoService {
 
     public function __construct() {
-        SDK::setAccessToken(config('mercadopago.access_token'));
+        try {
+            SDK::setAccessToken(config('mercadopago.access_token'));
+        } catch (\Exception $e) {
+            throw new MercadoPagoException();
+        }
+
     }
 
     public function crearPreferencia(Compra $compra) {
@@ -33,6 +39,11 @@ class MercadoPagoService {
         $preference->items = $items;
         $preference->external_reference = $compra->id;
         $preference->save();
+
+        // Validar errores
+        if($preference->error) {
+            throw new MercadoPagoException($preference->error->message, $preference->error->status);
+        }
 
         return $preference;
     }
