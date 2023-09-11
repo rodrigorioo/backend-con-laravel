@@ -24,18 +24,22 @@ class CompraService {
         $compra->fill($request->validated());
         $compra->save();
 
+        // Insertar productos del carrito
+        $productosCarrito = $request->productosCarrito->reduce(function (array $acc, ProductoCarritoData $productoCarritoData) {
+
+            $acc[$productoCarritoData->id] = [
+                'cantidad' => $productoCarritoData->cantidad,
+                'precio' => $productoCarritoData->producto->precio,
+            ];
+
+            return $acc;
+        }, []);
+
+        $compra->productos()->attach($productosCarrito);
+
         // Crear productos de la compra
-        $productosCompra = new Collection();
         /** @var ProductoCarritoData $productoCarrito */
         foreach($request->productosCarrito as $productoCarrito) {
-            $productosCompra->push(
-                CompraProducto::create([
-                    'compra_id' => $compra->id,
-                    'producto_id' => $productoCarrito->id,
-                    'cantidad' => $productoCarrito->cantidad,
-                    'precio' => $productoCarrito->producto->precio,
-                ])
-            );
 
             // Descontar stock del producto
             $producto = $productoCarrito->producto;

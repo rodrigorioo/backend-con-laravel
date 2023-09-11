@@ -6,11 +6,12 @@ use App\Data\ProductoCarritoData;
 use App\Enums\MetodoDeEnvio;
 use App\Rules\ValidarStockProductoRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 
 class FinalizarCompraAPIRequest extends FormRequest
 {
-    public array $productosCarrito;
+    public Collection $productosCarrito;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -48,11 +49,14 @@ class FinalizarCompraAPIRequest extends FormRequest
 
     public function passedValidation()
     {
+        $this->productosCarrito = new Collection();
         foreach($this->productos as $producto) {
-            $this->productosCarrito[] = ProductoCarritoData::from([
-                'id' => $producto['id'],
-                'cantidad' => $producto['cantidad'],
-            ]);
+            $this->productosCarrito->push(
+                ProductoCarritoData::from([
+                    'id' => $producto['id'],
+                    'cantidad' => $producto['cantidad'],
+                ])
+            );
         }
     }
 }

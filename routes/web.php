@@ -21,6 +21,8 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 // PRODUCTOS
 Route::prefix('productos')->group(function() {
 
+    Route::get('/', [\App\Http\Controllers\ProductoController::class, 'categorias']);
+
     Route::prefix('{categoria}')->group(function() {
 
         Route::get('/', [\App\Http\Controllers\ProductoController::class, 'categoria']);

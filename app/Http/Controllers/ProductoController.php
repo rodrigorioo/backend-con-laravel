@@ -23,4 +23,16 @@ class ProductoController extends Controller
             'producto' => $producto,
         ]);
     }
+
+    public function categorias() {
+
+        $categorias = Categoria::withCount([
+                'productos',
+            ])
+            ->get();
+
+        return view('productos', [
+            'categorias' => $categorias,
+        ]);
+    }
 }

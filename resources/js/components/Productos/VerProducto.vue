@@ -63,7 +63,7 @@ onMounted( () => {
 	axios
 		.get('/api/productos/'+props.id)
 		.then( (responseProducto) => {
-			producto.value = responseProducto.data;
+			producto.value = responseProducto.data.data;
 		});
 
 	// Traer productos del local storage

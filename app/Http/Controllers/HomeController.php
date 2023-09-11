@@ -9,7 +9,13 @@ class HomeController extends Controller
 {
     public function index() {
 
-        $categorias = Categoria::all();
+        $categorias = Categoria::select([
+            'id', 'nombre',
+        ])
+            ->with([
+                'productos:id,categoria_id,nombre',
+            ])
+            ->get();
 
         return view('home', [
             'categorias' => $categorias,
