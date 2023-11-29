@@ -23,6 +23,8 @@ export default {
 
         // Guardar productos en local storage
         localStorage.setItem("productos", JSON.stringify(this.productos));
+
+        alert("Producto agregado");
     },
 
     editarCantidad(idProducto, cantidad) {

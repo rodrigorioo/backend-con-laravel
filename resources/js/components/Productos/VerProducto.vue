@@ -21,14 +21,25 @@
 						<h6><strong>PRECIO:</strong> ${{ producto.precio }}</h6>
 					</div>
 
-					<div class="col-12">
-						<h6><strong>STOCK:</strong> {{ producto.stock }}</h6>
+					<div class="col-12"
+						v-if="producto.stock > 0">
+						<div class="row">
+							<div class="col-12">
+								<h6><strong>STOCK:</strong> {{ producto.stock }}</h6>
+							</div>
+
+							<div class="col-12 mt-3">
+								<AgregarAlCarrito
+									:producto="producto" />
+							</div>
+						</div>
 					</div>
 
-					<div class="col-12 mt-3">
-						<AgregarAlCarrito
-							:producto="producto" />
+					<div class="col-12"
+						 v-else>
+						<h6 class="text-danger">No hay stock disponible</h6>
 					</div>
+
 				</div>
 
 			</div>
