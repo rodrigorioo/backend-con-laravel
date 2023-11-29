@@ -26,6 +26,8 @@ Route::prefix('carrito')->group(function() {
     Route::post('finalizar-compra', [\App\Http\Controllers\API\CarritoController::class, 'finalizarCompra']);
 });
 
+Route::get('compras/ultimas-compras', [\App\Http\Controllers\API\CompraController::class, 'ultimasCompras']);
+
 
 
 
