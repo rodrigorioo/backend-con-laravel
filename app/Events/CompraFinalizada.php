@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CompraFinalizada
+class CompraFinalizada implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -30,8 +30,12 @@ class CompraFinalizada
      */
     public function broadcastOn(): array
     {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
+        $channels = [];
+
+        foreach($this->compra->productos as $producto) {
+            $channels[] = new Channel('productos.'.$producto->id);
+        }
+
+        return $channels;
     }
 }

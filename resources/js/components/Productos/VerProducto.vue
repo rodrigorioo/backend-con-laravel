@@ -67,15 +67,36 @@ const store = useCarritoStore();
 // Data
 const producto = ref({});
 
+// Métodos
+const cargarSocket = () => {
+
+    Echo.channel(`productos.${producto.value.id}`)
+        .listen('CompraFinalizada', (e) => {
+            obtenerProducto();
+        });
+};
+
+const obtenerProducto = () => {
+
+    return new Promise( (resolve, reject) => {
+        axios
+            .get('/api/productos/'+props.id)
+            .then( (responseProducto) => {
+                producto.value = responseProducto.data.data;
+
+                resolve();
+            });
+    });
+}
+
 // Eventos
 onMounted( () => {
 
 	// Traemos info del producto
-	axios
-		.get('/api/productos/'+props.id)
-		.then( (responseProducto) => {
-			producto.value = responseProducto.data.data;
-		});
+	obtenerProducto().then( () => {
+        // Agregar escucha de socket
+        cargarSocket();
+    });
 
 	// Traer productos del local storage
 	store.obtenerProductos();
