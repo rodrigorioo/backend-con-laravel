@@ -35,6 +35,15 @@ import {onMounted, ref} from "vue";
 // Data
 const ultimasCompras = ref([]);
 
+// Métodos
+const cargarSocket = () => {
+
+    Echo.private(`compras`)
+        .listen('CompraFinalizada', (e) => {
+            ultimasCompras.value.unshift(e.compra);
+        });
+};
+
 // Eventos
 onMounted( () => {
 
@@ -43,6 +52,9 @@ onMounted( () => {
         .get('/api/compras/ultimas-compras')
         .then( (responseUltimasCompras) => {
             ultimasCompras.value = responseUltimasCompras.data;
+
+            // Agregar escucha de socket
+            cargarSocket();
         });
 
 });
