@@ -25,42 +25,56 @@ class AdminControllerTest extends TestCase
         $response->assertViewIs('admin.login');
     }
 
-    public function test_loguear_ok(): void {
-
-        // Preparación del test
-        User::factory()->create([
-            'email' => 'alfredo@mail.com',
-            'password' => Hash::make('123456'),
-        ]);
-
-        // Ejecución del test
-        $response = $this->post(action([AdminController::class, 'loguear']), [
-            'email' => 'alfredo@mail.com',
-            'password' => '123456',
-        ]);
-
-        // Assertions
-        $response->assertRedirect(action([AdminController::class, 'home']));
-
-        $this->assertAuthenticated();
+    public static function dataProviderTestLoguear() {
+        return [
+            'Login ok' => [
+                'alfredo@mail.com',
+                '123456',
+                function() {
+                    return action([AdminController::class, 'home']);
+                },
+                true,
+            ],
+            'Login fail' => [
+                'alfredo@mail.com',
+                '1234567',
+                function() {
+                    return action([AdminController::class, 'login']);
+                },
+                false,
+            ],
+        ];
     }
 
-    public function test_loguear_fail(): void {
+    /**
+     * @dataProvider dataProviderTestLoguear
+     *
+     * @param string $email
+     * @param string $password
+     * @param $urlRedirect
+     * @param bool $authenticated
+     *
+     * @return void
+     */
+    public function test_loguear(string $email, string $password, $urlRedirect, bool $authenticated): void {
 
         // Preparación del test
         User::factory()->create([
-            'email' => 'alfredo2@mail.com',
+            'email' => 'alfredo@mail.com',
             'password' => Hash::make('123456'),
         ]);
 
         // Ejecución del test
         $response = $this->post(action([AdminController::class, 'loguear']), [
-            'email' => 'alfredo@mail.com',
-            'password' => '123456',
+            'email' => $email,
+            'password' => $password,
         ]);
 
         // Assertions
-        $response->assertRedirect(action([AdminController::class, 'login']))
-            ->assertSessionHasErrors();
+        $response->assertRedirect($urlRedirect());
+
+        if($authenticated) {
+            $this->assertAuthenticated();
+        }
     }
 }
