@@ -30,7 +30,9 @@ class CompraFinalizada implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        $channels = [];
+        $channels = [
+            new PrivateChannel('compras'),
+        ];
 
         foreach($this->compra->productos as $producto) {
             $channels[] = new Channel('productos.'.$producto->id);
