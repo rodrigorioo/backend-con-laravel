@@ -8,11 +8,14 @@ use App\Http\Controllers\API\CarritoController;
 use App\Mail\CompraRealizada;
 use App\Models\Compra;
 use App\Models\Producto;
+use App\Services\MercadoPagoService;
 use Database\Seeders\CategoriaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use Mockery\MockInterface;
+use stdClass;
 use Tests\TestCase;
 
 class CarritoControllerTest extends TestCase
@@ -23,6 +26,16 @@ class CarritoControllerTest extends TestCase
     {
         // Preparación del test
         Mail::fake();
+        $this->mock(MercadoPagoService::class, function (MockInterface $mock) {
+
+            $preferencia = new stdClass();
+            $preferencia->init_point = "http://www.preferencia-de-mercadopago.com";
+
+            $mock->shouldReceive('crearPreferencia')
+                ->once()
+                ->andReturn($preferencia);
+
+        });
 
         $this->seed(CategoriaSeeder::class);
         $productos = Producto::factory(5)->create([
