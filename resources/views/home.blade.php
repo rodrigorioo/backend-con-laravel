@@ -4,6 +4,27 @@
 
     <h1>HOME</h1>
 
+    <h3>OFERTAS DE LA SEMANA</h3>
+
+    <div class="container">
+        <div class="row mt-5 mb-5">
+            @foreach($ofertas as $oferta)
+                <div class="col-12 col-sm-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $oferta->nombre }}</h5>
+                            <a href="{{ action([\App\Http\Controllers\ProductoController::class, 'verProducto'], [$oferta->categoria, $oferta]) }}" class="btn btn-primary">IR AL PRODUCTO</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
+        </div>
+    </div>
+
+    <hr>
+
     <h3>CATEGORIAS</h3>
 
     <div class="container">

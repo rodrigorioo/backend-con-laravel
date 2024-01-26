@@ -10,6 +10,7 @@
             <th>ID</th>
             <th>Categoría</th>
             <th>Nombre</th>
+            <th>En oferta?</th>
             <th>Acciones</th>
         </tr>
         </thead>
@@ -19,6 +20,13 @@
                 <td>{{ $producto->id }}</td>
                 <td>{{ $producto->categoria->nombre }}</td>
                 <td>{{ $producto->nombre }}</td>
+                <td>
+                    @if($producto->oferta)
+                        <span class="badge badge-success">Sí</span>
+                    @else
+                        <span class="badge badge-danger">No</span>
+                    @endif
+                </td>
                 <td>
 
                     <div class="d-flex align-items-center">

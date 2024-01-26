@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Compra;
+use App\Models\Producto;
 use App\Observers\CompraObserver;
+use App\Observers\ProductoObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // Observers
         Compra::observe(CompraObserver::class);
+        Producto::observe(ProductoObserver::class);
     }
 }

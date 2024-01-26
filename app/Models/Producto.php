@@ -9,7 +9,7 @@ class Producto extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['categoria_id', 'nombre', 'stock', 'precio', 'imagen'];
+    protected $fillable = ['categoria_id', 'nombre', 'stock', 'precio', 'imagen', 'oferta'];
 
     public function categoria() {
         return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed();

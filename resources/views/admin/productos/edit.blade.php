@@ -53,6 +53,20 @@
                     </div>
 
                     <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="name">Oferta?</label>
+                            <select class="form-control" name="oferta">
+                                <option value="0" @if(!$producto->oferta) selected @endif>
+                                    No
+                                </option>
+                                <option value="1" @if($producto->oferta) selected @endif>
+                                    Sí
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
                         <button class="btn btn-info" type="submit">Guardar</button>
                     </div>
                 </div>
