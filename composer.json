@@ -14,6 +14,7 @@
         "mercadopago/dx-php": "2.5.3",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-data": "^3.6",
+        "spatie/laravel-permission": "^6.3",
         "symfony/http-client": "^6.3",
         "symfony/mailgun-mailer": "^6.3"
     },

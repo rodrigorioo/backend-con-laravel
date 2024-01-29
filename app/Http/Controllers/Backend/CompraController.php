@@ -7,16 +7,24 @@ use App\Http\Requests\EditarCompraRequest;
 use App\Mail\CompraPagada;
 use App\Models\Compra;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
 class CompraController extends Controller
 {
+    public function __construct() {
+        $this->middleware('can:view', ['only' => ['edit']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Compra::class);
+
         $compras = Compra::all();
 
         return view('admin.compras.index', [

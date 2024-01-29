@@ -12,6 +12,24 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProductoController extends Controller
 {
+    public function __construct() {
+        $this->middleware('can:crear producto', [
+            'only' => [
+                'create', 'store',
+            ]
+        ]);
+        $this->middleware('can:ver productos', [
+            'only' => [
+                'index',
+            ]
+        ]);
+        $this->middleware('can:editar producto', [
+            'only' => [
+                'show', 'edit', 'update',
+            ]
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */
