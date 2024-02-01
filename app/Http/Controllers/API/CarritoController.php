@@ -13,6 +13,7 @@ use App\Models\Compra;
 use App\Models\CompraProducto;
 use App\Models\Producto;
 use App\Services\CarritoService;
+use App\Services\ClienteService;
 use App\Services\CompraService;
 use App\Services\MercadoPagoService;
 use Illuminate\Http\JsonResponse;
@@ -25,7 +26,8 @@ class CarritoController extends Controller
     public function __construct(
         private CompraService $compraService,
         private CarritoService $carritoService,
-        private MercadoPagoService $mercadoPagoService
+        private MercadoPagoService $mercadoPagoService,
+        private ClienteService $clienteService,
     ) {}
 
     public function calcularTotal(CalcularTotalCarritoAPIRequest $request) {
@@ -42,8 +44,11 @@ class CarritoController extends Controller
 
             return DB::transaction(function() use($request) {
 
+                // Crear el cliente
+                $cliente = $this->clienteService->crearCliente($request);
+
                 // Crear la compra
-                $compra = $this->compraService->crearCompra($request);
+                $compra = $this->compraService->crearCompra($request, $cliente);
 
                 // Integrar mercadopago
                 $preferencia = $this->mercadoPagoService->crearPreferencia($compra);

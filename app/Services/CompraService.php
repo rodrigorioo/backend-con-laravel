@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Data\ProductoCarritoData;
 use App\Http\Requests\FinalizarCompraAPIRequest;
 use App\Mail\CompraRealizada;
+use App\Models\Cliente;
 use App\Models\Compra;
 use App\Models\CompraProducto;
 use App\Models\Producto;
@@ -17,11 +18,12 @@ class CompraService {
      * @param FinalizarCompraAPIRequest $request
      * @return Compra
      */
-    public function crearCompra(FinalizarCompraAPIRequest $request): Compra
+    public function crearCompra(FinalizarCompraAPIRequest $request, Cliente $cliente): Compra
     {
         // Crear compra
         $compra = new Compra();
         $compra->fill($request->validated());
+        $compra->cliente_id = $cliente->id;
         $compra->save();
 
         // Insertar productos del carrito

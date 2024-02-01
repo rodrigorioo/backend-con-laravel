@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\CarritoController;
+use App\Http\Controllers\API\ClienteController;
+use App\Http\Controllers\API\CompraController;
+use App\Http\Controllers\API\ProductoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,14 +23,18 @@ use Illuminate\Support\Facades\Route;
 //});
 
 // Productos
-Route::apiResource('productos', \App\Http\Controllers\API\ProductoController::class);
+Route::apiResource('productos', ProductoController::class);
 
 Route::prefix('carrito')->group(function() {
-    Route::post('calcular-total', [\App\Http\Controllers\API\CarritoController::class, 'calcularTotal']);
-    Route::post('finalizar-compra', [\App\Http\Controllers\API\CarritoController::class, 'finalizarCompra']);
+    Route::post('calcular-total', [CarritoController::class, 'calcularTotal']);
+    Route::post('finalizar-compra', [CarritoController::class, 'finalizarCompra']);
 });
 
-Route::get('compras/ultimas-compras', [\App\Http\Controllers\API\CompraController::class, 'ultimasCompras']);
+Route::get('compras/ultimas-compras', [CompraController::class, 'ultimasCompras']);
+
+Route::prefix('clientes')->group(function () {
+    Route::post('ingresar', [ClienteController::class, 'ingresar']);
+});
 
 
 
