@@ -13,28 +13,41 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Email</label>
-                                    <input class="form-control" type="email" placeholder="Ingrese el email" autocomplete="off"
-                                        v-model="email">
-                                </div>
-                            </div>
 
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Password</label>
-                                    <input class="form-control" type="password" placeholder="Ingrese el password"
-                                        v-model="password">
+                        <form autocomplete="off">
+                            <div class="row">
+
+                                <div class="col-12 my-3"
+                                    v-if="errorMessage !== ''">
+                                    <div class="alert alert-danger">
+                                        {{ errorMessage }}
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="name">Email</label>
+                                        <input class="form-control" type="email" placeholder="Ingrese el email" autocomplete="off"
+                                            v-model="email">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="name">Password</label>
+                                        <input class="form-control" type="password" placeholder="Ingrese el password" autocomplete="new-password"
+                                            v-model="password">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="button" class="btn btn-success"
-                            @click="ingresar">Ingresar</button>
+                            @click="ingresar"
+
+                            :disabled="ingresando">Ingresar</button>
                     </div>
                 </div>
             </div>
@@ -48,20 +61,30 @@ import {onMounted, ref} from "vue";
 // Data
 const email = ref("");
 const password = ref("");
+const errorMessage = ref("");
+const ingresando = ref(false);
 
 // Métodos
 const ingresar = () => {
+
+    ingresando.value = true;
+    errorMessage.value = "";
+
     axios
         .post('/api/clientes/ingresar', {
             email: email.value,
             password: password.value,
         })
-        .then( (responseIngresarCliente) => {
+        .then( () => {
 
-            // TODO:
+            window.location.href = "/compras";
 
-        }).catch( (err) => {
-            console.error(err);
+        })
+        .catch( (err) => {
+            errorMessage.value = err.response.data.message;
+        })
+        .finally( () => {
+            ingresando.value = false;
         });
 }
 

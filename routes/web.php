@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\CategoriaController;
+use App\Http\Controllers\Backend\CompraController;
+use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductoController;
 use App\Mail\CompraPagada;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -16,21 +22,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 // HOME
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index']);
 
 // PRODUCTOS
 Route::prefix('productos')->group(function() {
 
-    Route::get('/', [\App\Http\Controllers\ProductoController::class, 'categorias']);
+    Route::get('/', [ProductoController::class, 'categorias']);
 
     Route::prefix('{categoria}')->group(function() {
 
-        Route::get('/', [\App\Http\Controllers\ProductoController::class, 'categoria']);
-        Route::get('{producto}', [\App\Http\Controllers\ProductoController::class, 'verProducto']);
+        Route::get('/', [ProductoController::class, 'categoria']);
+        Route::get('{producto}', [ProductoController::class, 'verProducto']);
     });
 });
 
-Route::get('carrito', [\App\Http\Controllers\CarritoController::class, 'carrito']);
+Route::get('carrito', [CarritoController::class, 'carrito']);
+
+Route::get('compras', [\App\Http\Controllers\CompraController::class, 'verCompras']);
 
 Route::get('cancelar-compra/{compra}', [\App\Http\Controllers\CompraController::class, 'cancelarCompra'])
     ->name('cancelar-compra');
@@ -42,23 +50,23 @@ Route::get('cancelar-compra/{compra}', [\App\Http\Controllers\CompraController::
 Route::prefix('admin')->group(function() {
 
     Route::middleware('admin-logueado:0')->group(function() {
-        Route::get('login', [\App\Http\Controllers\Backend\AdminController::class, 'login']);
-        Route::post('login', [\App\Http\Controllers\Backend\AdminController::class, 'loguear']);
+        Route::get('login', [AdminController::class, 'login']);
+        Route::post('login', [AdminController::class, 'loguear']);
     });
 
     Route::middleware('admin-logueado:1')->group(function() {
 
-        Route::get('/', [\App\Http\Controllers\Backend\AdminController::class, 'home']);
-        Route::get('logout', [\App\Http\Controllers\Backend\AdminController::class, 'logout']);
+        Route::get('/', [AdminController::class, 'home']);
+        Route::get('logout', [AdminController::class, 'logout']);
 
         // Categorías
-        Route::resource('categorias', \App\Http\Controllers\Backend\CategoriaController::class);
+        Route::resource('categorias', CategoriaController::class);
 
         // Productos
         Route::resource('productos', \App\Http\Controllers\Backend\ProductoController::class);
 
         // Compras
-        Route::resource('compras', \App\Http\Controllers\Backend\CompraController::class);
+        Route::resource('compras', CompraController::class);
     });
 });
 

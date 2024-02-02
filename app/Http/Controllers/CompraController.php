@@ -15,4 +15,8 @@ class CompraController extends Controller
 
         dd("La compra no existe");
     }
+
+    public function verCompras() {
+        return view('ver_compras');
+    }
 }
