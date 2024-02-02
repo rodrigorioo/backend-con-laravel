@@ -35,7 +35,7 @@ Route::get('compras/ultimas-compras', [CompraController::class, 'ultimasCompras'
 Route::prefix('clientes')->group(function () {
     Route::post('ingresar', [ClienteController::class, 'ingresar']);
 
-    // Route::get('compras', [ClienteController::class, 'compras']);
+    Route::get('compras', [ClienteController::class, 'compras'])->middleware('auth:sanctum');
 });
 
 

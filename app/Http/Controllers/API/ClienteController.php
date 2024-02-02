@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ClienteController extends Controller
 {
@@ -25,7 +26,7 @@ class ClienteController extends Controller
 
         return new JsonResponse([
             'message' => 'Email o contraseña inválidos',
-        ], Response::HTTP_UNAUTHORIZED);
+        ], ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
     public function compras(Request $request) {
