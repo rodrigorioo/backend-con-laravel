@@ -70,22 +70,24 @@ const ingresar = () => {
     ingresando.value = true;
     errorMessage.value = "";
 
-    axios
-        .post('/api/clientes/ingresar', {
-            email: email.value,
-            password: password.value,
-        })
-        .then( () => {
+    axios.get('/sanctum/csrf-cookie').then(response => {
+        axios
+            .post('/api/clientes/ingresar', {
+                email: email.value,
+                password: password.value,
+            })
+            .then( () => {
 
-            window.location.href = "/compras";
+                window.location.href = "/compras";
 
-        })
-        .catch( (err) => {
-            errorMessage.value = err.response.data.message;
-        })
-        .finally( () => {
-            ingresando.value = false;
-        });
+            })
+            .catch( (err) => {
+                errorMessage.value = err.response.data.message;
+            })
+            .finally( () => {
+                ingresando.value = false;
+            });
+    });
 }
 
 // Eventos
