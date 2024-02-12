@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\CompraController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PruebaRequestController;
 use App\Mail\CompraPagada;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,8 @@ Route::get('compras', [\App\Http\Controllers\CompraController::class, 'verCompra
 
 Route::get('cancelar-compra/{compra}', [\App\Http\Controllers\CompraController::class, 'cancelarCompra'])
     ->name('cancelar-compra');
+
+Route::get('prueba-request', [PruebaRequestController::class, 'vistaRequest']);
 
 /**
  * ADMIN
