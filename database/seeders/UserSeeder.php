@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             ->first();
 
         if (empty($user)) {
-            User::create([
+            $user = User::create([
                 'name' => 'Rodrigo',
                 'email' => 'rodrigo@mail.com',
                 'password' => Hash::make('123456'),
@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
             ->first();
 
         if (empty($user)) {
-            User::create([
+            $user = User::create([
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'password' => Hash::make('123456'),

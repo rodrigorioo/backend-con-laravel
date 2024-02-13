@@ -10,7 +10,7 @@
 
             @include('_includes.admin._modules.errores')
 
-            <form method="post" action="{{ action([\App\Http\Controllers\Backend\ProductoController::class, 'update'], $producto) }}">
+            <form method="post" action="{{ action([\App\Http\Controllers\Backend\ProductoController::class, 'update'], $producto) }}" enctype="multipart/form-data">
 
                 @csrf
 
@@ -35,6 +35,18 @@
                         <div class="form-group">
                             <label for="name">Nombre</label>
                             <input class="form-control" name="nombre" id="nombre" type="text" value="{{ $producto->nombre }}" placeholder="Ingrese un nombre" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+
+                            @if($producto->imagen !== '')
+                                <img src="{{ asset('storage/'.$producto->imagen) }}" class="img-fluid" />
+                            @endif
+
+                            <label for="imagen" class="form-label">Seleccionar foto</label>
+                            <input class="form-control" type="file" name="imagen">
                         </div>
                     </div>
 

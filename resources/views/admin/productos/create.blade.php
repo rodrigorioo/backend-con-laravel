@@ -36,6 +36,13 @@
 
                     <div class="col-sm-12">
                         <div class="form-group">
+                            <label for="imagen" class="form-label">Seleccionar foto</label>
+                            <input class="form-control" type="file" name="imagen">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
                             <label for="name">Stock</label>
                             <input class="form-control" name="stock" id="stock" type="text" placeholder="Ingrese un stock" autocomplete="off">
                         </div>

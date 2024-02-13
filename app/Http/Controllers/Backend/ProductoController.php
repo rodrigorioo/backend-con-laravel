@@ -8,6 +8,7 @@ use App\Http\Requests\EditarProductoRequest;
 use App\Models\Categoria;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redirect;
 
 class ProductoController extends Controller
@@ -60,7 +61,16 @@ class ProductoController extends Controller
     public function store(CrearProductoRequest $request)
     {
         $producto = new Producto();
-        $producto->fill($request->validated());
+
+        $data = Arr::except($request->validated(), [
+            'imagen',
+        ]);
+
+        $storageLink = $request->file('imagen')->store('productos', 'public');
+
+        $data['imagen'] = $storageLink;
+
+        $producto->fill($data);
         $producto->save();
 
         return Redirect::action([ProductoController::class, 'index'])->with([
@@ -94,7 +104,18 @@ class ProductoController extends Controller
      */
     public function update(EditarProductoRequest $request, Producto $producto)
     {
-        $producto->fill($request->validated());
+
+        $data = Arr::except($request->validated(), [
+            'imagen',
+        ]);
+
+        if($request->hasFile('imagen')) {
+            $storageLink = $request->file('imagen')->store('productos', 'public');
+
+            $data['imagen'] = $storageLink;
+        }
+
+        $producto->fill($data);
         $producto->save();
 
         return Redirect::action([ProductoController::class, 'index'])->with([
