@@ -64,13 +64,12 @@ class CarritoControllerTest extends TestCase
         $response = $this->postJson(action([CarritoController::class, 'finalizarCompra']), $dataRequest);
 
         // Asserts
-        $this->assertTrue(true);
-//        $response->assertStatus(200);
-//        $responseData = $response->json();
-//
-//        $this->assertArrayHasKey('mensaje', $responseData);
-//        $this->assertArrayHasKey('init_point', $responseData);
-//
-//        Mail::assertSent(CompraRealizada::class);
+        $response->assertStatus(200);
+        $responseData = $response->json();
+
+        $this->assertArrayHasKey('mensaje', $responseData);
+        $this->assertArrayHasKey('init_point', $responseData);
+
+        Mail::assertSent(CompraRealizada::class);
     }
 }
