@@ -57,5 +57,5 @@
         </div>
     </div>
 
-    <h5>PRUEBA WEBHOOK</h5>
+    <h5>PRUEBA WEBHOOK #2</h5>
 @endsection
